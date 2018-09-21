@@ -6,172 +6,188 @@ import {
   BrowserRouter,
   Route, Link
 } from 'react-router-dom';
-import {connect} from 'react-redux';
 import '../styles/App.css';
-
-
-const mapStateToProps = (state) => {
-  return {
-    user: state.reducer1,
-    math: state.math
-
-  }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setName: (name) => {
-      dispatch({
-        type: "SET_NAME",
-        payload: name
-      })
-    }
-
-  }
-};
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      search: '',
-      signup: false,
-      signin: false,
-      isLoggedIn: false
+      lang: 'EN',
+      search: false,
+      langButton: '',
     }
-    this.handleChange = this.handleChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleLangSelect = this.handleLangSelect.bind(this);
   }
 
-  handleChange(e) {
-    e.preventDefault();
-
-    this.setState({search: e.target.value})
+  handleLangSelect() {
+    this.setState(prevState => ({
+      langButton: prevState.langButton === '' ? 'selected' : ''
+    }))
   }
+
+  handleSearch() {
+    this.setState({search: !this.state.search})
+  }
+
   render() {
     return (
       <BrowserRouter>
         <div>
-          <div className="body1">
-            <header>
-            <div classname="topLogo">
-              <a className="Logo" href='/' title="Bluebeam, Inc.">
-                <img href='' src='../logo.svg' alt="Bluebeam"/>
+          <header>
+            <div className="topLogo">
+              <a className="leftLogo" href='/' title="Bluebeam, Inc.">
+                <img href='' src={require('../logo.svg')} alt="Bluebeam"/>
               </a>
-              <div className="searchIcon">
-                
+              <div className="rightLogo">
+                <a className="cart">
+                  <img className='cart' alt="cart" src={require('../cart.svg')}/>
+                </a>
+                <div className={`lang-button ${this.state.langButton}`} onClick={this.handleLangSelect}>
+                  <a className="lang">
+                    <img className='flag' alt={this.state.lang} src={require('../flags/us.svg')}/>
+                    <i className={`arrow2 ${this.state.langButton}`}/>
+                  </a>
+                </div>
+                { this.state.langButton 
+                  ?
+                  <ul className={this.state.langButton}>
+                    <li className='lang'>
+                      <p className='lang-menu'>Dansk</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/dk.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Deutsch (CH)</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/ch.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Deutsch (DE)</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/de.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>English (AU)</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/au.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>English (UK)</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/gb.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>English (US)</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/us.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Español</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/es.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Français</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/fr.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Italiano</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/it.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Nederlands</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/nl.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Norsk</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/no.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Suomi</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/fi.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>Svenska</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/se.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>日本語</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/jp.svg')}/>
+                    </li>
+                    <li className='lang'>
+                      <p className='lang-menu'>한글</p>
+                      <img className='menu-flag' alt={this.state.lang} src={require('../flags/kr.svg')}/>
+                    </li>
+
+
+                  </ul>
+                  : null
+                }
               </div>
             </div>
-              
-            <nav role="navigation" className="hamburger-menu header-mobile-visible">
-              <div id="menuToggle">
-                <input type="checkbox" className="ham-button"/>
-                
-                <span></span>
-                <span></span>
-                <span></span>
+            {
+              this.state.search
+                ? <form className='nav-item'>
+                    <input className='searching' type='text' name='What are you looking for?'/>
 
-                <ul id="menu">
-                  <a href="" className="ham-items"><li>Sub1</li></a>
-                  <a href="" className="ham-items"><li>Subpage2</li></a>
-                  <a href="" className="ham-items"><li>Subthing3</li></a>
-                  <a href="" className="ham-items"><li>sub4</li></a>
-                  <a href="" className="ham-items"><li>nothersub5</li></a>
-                </ul>
-              </div>
-            </nav>
+                  </form> 
+                : <nav>
+                    <a className='nav-item'>
+                      <span className='nav-font'>SOLUTIONS</span>
+                      <i className='arrow'/>
+                    </a>
+                    <a className='nav-item'>
+                      <span className='nav-font'>TRAINING</span>
 
+                    </a>
+                    <a className='nav-item'>
+                      <span className='nav-font'>SUPPORT</span>
 
-              {/* <div className="hamburger-menu header-mobile-visible">MENU</div> */}
+                    </a>
+                    <a className='nav-item'>
+                      <span className='nav-font'>COMPANY</span>
 
-              <div className="header-section header-section-main">
-                {/* <a href="" className="header-title">TITLEPAGE</a> */}
-                <Link to="/"><div className="header-title">TITLEPAGE</div></Link>
-                {/* <a href="" className="header-mobile-invisible">Sub1</a> */}
-                <Link to='/main'><div className="header-movile-invisible">Main</div></Link>
-                {/* <a href="" className="header-mobile-invisible">Subpage2</a> */}
-                <Link to='/about'><div className="header-mobile-invisible">About</div></Link>
-                <a href="" className="header-mobile-invisible">Subthing3</a>
-                <a href="" className="header-mobile-invisible">Sub4</a>
-                <a href="" className="header-mobile-invisible">Sub5</a>
-              </div>
+                    </a>
+                    <a className='nav-item'>
+                      <span className='nav-font'>STORE</span>
 
-              {
-                this.state.isLoggedIn 
-                  ? <div> Hi User </div>
-                  : <div className="header-section header-section-right">
-                      <a href="" className="minimal">SIGN IN</a>
-                      <a href="" className="minimal header-mobile-invisible">SIGN UP</a>
-
-                    </div>
-              }
-
-              <div className="searchIcon">
-                <i>
-                  search
-                </i>
-              </div>
-            </header>
-
-            {this.state.signup || this.state.signin ? 
-              <div className="sign">
-
-              </div>
-              : null
+                    </a>
+                    <button className='trial-button'>
+                      Download a Trial
+                    </button>
+                    
+                    <a className='search' onClick={this.handleSearch}>
+                      <img className='search' alt="search" src={require('../search.svg')}/>
+                    </a>
+                  </nav>
             }
+            
+              
+            
+          </header>
 
-            <main>
-            <div className="route-page">
-                {/* <Route path exact='/' component={Home}/> */}
-                <Route path exact='/' render={()=>{
-                  return <Home/>
-                }}/>
-                {/* <Route path='/main' component={MainC}/> */}
-                <Route path='/main' render={(props)=>(
-                  <MainC 
-                    {...props} 
-                    names={this.props.user.name}
-                    changeName={()=>this.props.setName(this.state.search)}
-                  />
-                )}/>
-                <Route path='/about' component={About}/>
-              </div>
-
-              <hr />
-
-              <div className="shot-grid">
-                <div className="shot">
-                  <Link to="/main"><div className="mock-img"></div></Link>
-                  <div className="shot-name">Shot Name1</div>
-                </div>
-                <div className="shot">
-                  <Link to="/about"><div className="mock-img"></div></Link>
-                  <div className="shot-name">Shot Name2</div>
-                </div>
-                <div className="shot">
-                  <div className="mock-img"></div>
-                  <div className="shot-name">Shot Name3</div>
-                </div>
-                <div className="shot">
-                  <div className="mock-img"></div>
-                  <div className="shot-name">Shot Name4</div>
-                </div>
-                <div className="shot">
-                  <div className="mock-img"></div>
-                  <div className="shot-name">Shot Name5</div>
-                </div>
-                <div className="shot">
-                  <div className="mock-img"></div>
-                  <div className="shot-name">Shot Name6</div>
-                </div>
-                <div className="shot">
-                  <div className="mock-img"></div>
-                  <div className="shot-name">Shot Name7</div>
+          <main>
+            <div className="splash">
+              <div className='spash-main'>
+                <h1 className='splash-head'>
+                  Build Better
+                  <br/>
+                  with Bluebeam
+                </h1>
+                <p className='splash-p'>
+                  For those who design, engineer, bid and build our world, Bluebeam
+                  <sup>®</sup>
+                  Revu
+                  <sup>®</sup>
+                  is how professionals get more done.
+                </p>
+                <div className='splash-buttons'>
+                  <button className='splash-b1'>
+                    Explore Revu
+                  </button>
+                  <button className='splash-b2'>
+                    Upgrade to Revu 2018
+                  </button>
                 </div>
               </div>
-            </main>
-          </div>
+            </div>
+            
+          </main>
 
-          <hr />
          
         </div>
         
@@ -183,4 +199,4 @@ class App extends Component {
 }
 
 // export default App;
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
